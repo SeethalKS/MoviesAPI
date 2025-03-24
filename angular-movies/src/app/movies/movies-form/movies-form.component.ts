@@ -10,10 +10,11 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
 import { InputImgComponent } from '../../shared/components/input-img/input-img.component';
 import { MultipleSelectorComponent } from "../../shared/components/multiple-selector/multiple-selector.component";
 import { MultipleSelectorDTO } from '../../shared/components/multiple-selector/MultipleSelectorDTO';
+import { ActorsAutocompleteComponent } from "../../actors/actors-autocomplete/actors-autocomplete.component";
 
 @Component({
   selector: 'app-movies-form',
-  imports: [MatFormFieldModule, ReactiveFormsModule, MatInputModule, MatButtonModule, RouterLink, MatDatepickerModule, InputImgComponent, MultipleSelectorComponent],
+  imports: [MatFormFieldModule, ReactiveFormsModule, MatInputModule, MatButtonModule, RouterLink, MatDatepickerModule, InputImgComponent, MultipleSelectorComponent, ActorsAutocompleteComponent],
   templateUrl: './movies-form.component.html',
   styleUrl: './movies-form.component.css'
 })
