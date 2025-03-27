@@ -1,5 +1,5 @@
 import { Component, Input, numberAttribute } from '@angular/core';
-import { ActorCreationDTO, ActorDTO } from '../actors.model';
+import { ActorCreationDTO, ActorDTO } from '../actors.models';
 import { ActorsFormComponent } from "../actors-form/actors-form.component";
 
 @Component({

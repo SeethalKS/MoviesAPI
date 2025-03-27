@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { ActorsFormComponent } from "../actors-form/actors-form.component";
-import { ActorCreationDTO } from '../actors.model';
+import { ActorCreationDTO } from '../actors.models';
 
 @Component({
   selector: 'app-create-actor',

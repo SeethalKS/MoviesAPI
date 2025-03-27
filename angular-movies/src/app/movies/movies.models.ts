@@ -1,3 +1,5 @@
+import { ActorAutoCompleteDTO } from "../actors/actors.models";
+
 export interface MovieDTO{
     id:number,
     title:string;
@@ -13,4 +15,5 @@ export interface MovieCreationDTO{
     poster?:File;
     genresIds?:number[];
     theatersIds?:number[];
+    actors?: ActorAutoCompleteDTO[];
 }
