@@ -1,9 +1,11 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.OutputCaching;
 using MoviesAPI.Entities;
 
 namespace MoviesAPI.Controllers
 {
     [Route("api/genres")]  //[Route("api/[controller]")]
+    [ApiController]
     public class GenresController:ControllerBase
     {
         [HttpGet] //api/genres
@@ -16,21 +18,29 @@ namespace MoviesAPI.Controllers
             return genres;
         }
 
-        [HttpGet("{id}")] //api/genres/500
-        public ActionResult<Genre> Get(int id)
+        [HttpGet("{id:int}")] //api/genres/500
+        [OutputCache]
+        public async Task<ActionResult<Genre>> Get(int id)
         {
             var repository = new InMemoryRepository();
-            var genre = repository.GetById(id);
+            var genre = await repository.GetById(id);
             if(genre is null)
             {
                 return NotFound();
             }
             return genre;
         }
-        [HttpPost]
-        public void Post()
+        [HttpGet("{name}")] //api/genres/action
+        [OutputCache]
+        public async Task<ActionResult<Genre>> Get(string name, [FromQuery] int id)
         {
-
+            return new Genre {Id = id, Name = name };
+        }
+        [HttpPost]
+        public ActionResult<Genre> Post([FromBody] Genre genre)
+        {
+            genre.Id = 3;
+            return genre;
         }
 
         [HttpPut]
