@@ -4,9 +4,11 @@ using MoviesAPI.Entities;
 namespace MoviesAPI.Controllers
 {
     [Route("api/genres")]  //[Route("api/[controller]")]
-    public class GenresController
+    public class GenresController:ControllerBase
     {
-        [HttpGet]
+        [HttpGet] //api/genres
+        [HttpGet("all-genres")] //api/genres/all-genres
+        [HttpGet("/all-of-the-genres")] // /all-of-the-genres
         public List<Genre> Get()
         {
             var repository = new InMemoryRepository();
@@ -14,11 +16,15 @@ namespace MoviesAPI.Controllers
             return genres;
         }
 
-        [HttpGet]
-        public Genre? Get(int id)
+        [HttpGet("{id}")] //api/genres/500
+        public ActionResult<Genre> Get(int id)
         {
             var repository = new InMemoryRepository();
             var genre = repository.GetById(id);
+            if(genre is null)
+            {
+                return NotFound();
+            }
             return genre;
         }
         [HttpPost]
