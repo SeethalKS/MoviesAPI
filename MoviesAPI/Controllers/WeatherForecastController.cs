@@ -21,6 +21,9 @@ namespace MoviesAPI.Controllers
     [HttpGet(Name = "GetWeatherForecast")]
     public IEnumerable<WeatherForecast> Get()
     {
+      var repository = new InMemoryRepository();
+      var genres = repository.GetAllGenres();
+
       return Enumerable.Range(1, 5).Select(index => new WeatherForecast
       {
         Date = DateOnly.FromDateTime(DateTime.Now.AddDays(index)),
