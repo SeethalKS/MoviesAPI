@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.OutputCaching;
 using Microsoft.EntityFrameworkCore;
 using MoviesAPI.DTOs;
 using MoviesAPI.Entities;
+using MoviesAPI.Utilities;
 
 namespace MoviesAPI.Controllers
 {
@@ -28,17 +29,30 @@ namespace MoviesAPI.Controllers
         [HttpGet] //api/genres
         
         [OutputCache(Tags = [cacheTag])]
-        public async Task<List<GenreDTO>> Get()
+        public async Task<List<GenreDTO>> Get([FromQuery] PaginationDTO pagination)
         {
-            return await context.Genres.ProjectTo<GenreDTO>(mapper.ConfigurationProvider).ToListAsync(); ;
+            var queryable = context.Genres;
+            await HttpContext.InsertPaginationParametersInHeader(queryable);
+            return await queryable
+                .OrderBy(g=>g.Name)
+                .Paginate(pagination)
+                .ProjectTo<GenreDTO>(mapper.ConfigurationProvider)
+                .ToListAsync(); ;
         }
 
         [HttpGet("{id:int}",Name ="GetGenreById")] //api/genres/500
         [OutputCache(Tags = [cacheTag])]
-        public async Task<ActionResult<Genre>> Get(int id)
+        public async Task<ActionResult<GenreDTO>> Get(int id)
         {
-            
-           throw new NotImplementedException();
+            var genre = await 
+                context.Genres
+                .ProjectTo<GenreDTO>(mapper.ConfigurationProvider)
+                .FirstOrDefaultAsync(g=>g.Id ==id);
+            if(genre is null)
+            {
+                return NotFound();
+            }
+            return genre;
         }
         
         [HttpPost]
@@ -53,9 +67,20 @@ namespace MoviesAPI.Controllers
         
         }
 
-        [HttpPut]
-        public void Put()
+        [HttpPut("{id:int}")]
+        public async Task<IActionResult> Put(int id, [FromBody] GenreCreationDTO genreCreationDTO)
         { 
+            var genreExists = await context.Genres.AnyAsync(g => g.Id == id);
+            if(!genreExists) {
+                return NotFound();
+            }
+            var genre = mapper.Map<Genre>(genreCreationDTO);
+            genre.Id = id;
+
+            context.Update(genre);
+            await context.SaveChangesAsync();
+            await outputCacheStore.EvictByTagAsync(cacheTag,default);
+            return NoContent();
         }
         [HttpDelete]
         public void Delete() 
