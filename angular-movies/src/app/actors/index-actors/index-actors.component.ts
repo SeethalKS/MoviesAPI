@@ -9,10 +9,11 @@ import { ActorsService } from '../actors.service';
 import { PaginationDTO } from '../../shared/models/PaginationDTO';
 import { ActorDTO } from '../actors.models';
 import { HttpResponse } from '@angular/common/http';
+import { SweetAlert2Module } from '@sweetalert2/ngx-sweetalert2';
 
 @Component({
   selector: 'app-index-actors',
-  imports: [MatButtonModule,MatIconModule,RouterLink,MatTableModule,GenericListComponent,MatPaginatorModule],
+  imports: [MatButtonModule,MatIconModule,RouterLink,MatTableModule,GenericListComponent,MatPaginatorModule,SweetAlert2Module],
   templateUrl: './index-actors.component.html',
   styleUrl: './index-actors.component.css'
 })
@@ -22,6 +23,10 @@ pagination:PaginationDTO ={page:1,recordsperPage:5};
 totalRecordsCount!:number;
 columnsToDisplay=['id','name','actions'];
 actors!: ActorDTO[];
+
+constructor(){
+  this.loadRecords();
+}
 
 loadRecords(){
   this.actorsService.getPaginated(this.pagination).subscribe((response:HttpResponse<ActorDTO[]>)=>{
