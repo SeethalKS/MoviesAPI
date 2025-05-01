@@ -69,5 +69,36 @@ namespace MoviesAPI.Controllers
             return CreatedAtRoute("GetActorById", new { id = actor.Id }, actorDTO);
    
         }
+        [HttpPut("{id:int}")]
+        public async Task<IActionResult> Put(int id, [FromForm] ActorCreationDTO actorCreationDTO)
+        {
+            var actor = await context.Actors.FirstOrDefaultAsync(a=>a.Id ==id);
+            if(actor is null)
+            {
+                return NotFound();
+            }
+            actor = mapper.Map(actorCreationDTO, actor);
+            if(actorCreationDTO.Picture is not null)
+            {
+                actor.Picture = await fileStorage.Edit(actor.Picture,container,actorCreationDTO.Picture);
+            }
+            await context.SaveChangesAsync();
+            await outputCacheStore.EvictByTagAsync(cacheTag, default);
+            return NoContent();
+        }
+        [HttpDelete("{id:int}")]
+        public async Task<IActionResult> Delete(int id)
+        {
+            var actor =await context.Actors.FirstOrDefaultAsync(a=>a.Id ==id);
+            if(actor is null)
+            {
+                return NotFound();
+            }
+            context.Remove(actor);
+            await context.SaveChangesAsync();
+            await outputCacheStore.EvictByTagAsync(cacheTag, default);
+            await fileStorage.Delete(actor.Picture,container);
+            return NoContent();
+        }
     }
 }
