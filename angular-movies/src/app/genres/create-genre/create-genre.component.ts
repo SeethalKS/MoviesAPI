@@ -10,32 +10,21 @@ import { GenresFormComponent } from "../genres-form/genres-form.component";
 import { GenresService } from '../genres.service';
 import { extractErrors } from '../../shared/functions/extractErrors';
 import { DisplayErrorsComponent } from "../../shared/components/display-errors/display-errors.component";
+import { CRUD_SERVICE_TOKEN } from '../../shared/providers/providers';
+import { CreateEntityComponent } from "../../shared/components/create-entity/create-entity.component";
 
 @Component({
   selector: 'app-create-genre',
-  imports: [MatButtonModule, ReactiveFormsModule, MatFormFieldModule, MatInputModule, RouterLink, GenresFormComponent, DisplayErrorsComponent],
+  imports: [MatButtonModule, ReactiveFormsModule, MatFormFieldModule, MatInputModule, RouterLink, GenresFormComponent, DisplayErrorsComponent, CreateEntityComponent],
   templateUrl: './create-genre.component.html',
-  styleUrl: './create-genre.component.css'
+  styleUrl: './create-genre.component.css',
+  providers:[
+    {
+      provide:CRUD_SERVICE_TOKEN,useClass:GenresService
+    }
+  ]
 })
 export class CreateGenreComponent {
 
-  router = inject(Router);
-  genresService = inject(GenresService);
-  errors: string[] = [];
-
-  saveChanges(genre:GenreCreationDTO){
-    //savechanges
-    //console.log(genre);
-
-    this.genresService.create(genre).subscribe({
-      next:() => {
-        this.router.navigate(['/genres'])
-      },
-      error:err=>{
-        const errors = extractErrors(err);
-        this.errors=errors;
-      }
-    })
-   
-  }
+ genresForm = GenresFormComponent;
 }

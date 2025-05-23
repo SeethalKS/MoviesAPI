@@ -5,11 +5,12 @@ import { environment } from '../../environments/environment';
 import { PaginationDTO } from '../shared/models/PaginationDTO';
 import { Observable } from 'rxjs';
 import { buildQueryParams } from '../shared/functions/buildQueryParams';
+import { ICRUDService } from '../shared/interfaces/ICURDService';
 
 @Injectable({
   providedIn: 'root'
 })
-export class ActorsService {
+export class ActorsService implements ICRUDService<ActorDTO,ActorCreationDTO> {
 
   constructor() { }
 

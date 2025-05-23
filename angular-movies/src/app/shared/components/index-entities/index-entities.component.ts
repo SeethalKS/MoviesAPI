@@ -9,6 +9,7 @@ import { MatTableModule } from '@angular/material/table';
 import { RouterLink } from '@angular/router';
 import { SweetAlert2Module } from '@sweetalert2/ngx-sweetalert2';
 import { GenericListComponent } from '../generic-list/generic-list.component';
+import { ICRUDService } from '../../interfaces/ICURDService';
 
 @Component({
   selector: 'app-index-entities',
@@ -17,8 +18,8 @@ import { GenericListComponent } from '../generic-list/generic-list.component';
   templateUrl: './index-entities.component.html',
   styleUrl: './index-entities.component.css'
 })
-export class IndexEntitiesComponent<TDTO> {
-  CRUDService = inject(CRUD_SERVICE_TOKEN) as any;
+export class IndexEntitiesComponent<TDTO,TCreationDTO> {
+  CRUDService = inject(CRUD_SERVICE_TOKEN) as ICRUDService<TDTO,TCreationDTO>;
   entities!:TDTO[];
   pagination:PaginationDTO={page:1,recordsperPage:5};
   totalRecordsCount!:number;

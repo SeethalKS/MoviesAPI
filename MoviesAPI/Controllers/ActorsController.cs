@@ -40,7 +40,7 @@ namespace MoviesAPI.Controllers
                 .ProjectTo<ActorDTO>(mapper.ConfigurationProvider)
                 .ToListAsync();
         }
-        [HttpGet]
+        [HttpGet("{id:int}",Name ="GetActorsById")]
         [OutputCache(Tags = [cacheTag])]
         public async Task<ActionResult<ActorDTO>> Get(int id)
         {
