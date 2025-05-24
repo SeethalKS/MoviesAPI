@@ -11,7 +11,7 @@ namespace MoviesAPI.Controllers
 {
     [Route("api/genres")]  //[Route("api/[controller]")]
     [ApiController]
-    public class GenresController:ControllerBase
+    public class GenresController:CustomBaseController
     {
         private readonly IOutputCacheStore outputCacheStore;
         private readonly ApplicationDbContext context;
@@ -19,6 +19,7 @@ namespace MoviesAPI.Controllers
         private const string cacheTag = "genres";
         public GenresController(IOutputCacheStore outputCacheStore,ApplicationDbContext context
             ,IMapper mapper)
+            :base(context,mapper)
         { 
             this.outputCacheStore = outputCacheStore;
             this.context = context;
@@ -31,28 +32,14 @@ namespace MoviesAPI.Controllers
         [OutputCache(Tags = [cacheTag])]
         public async Task<List<GenreDTO>> Get([FromQuery] PaginationDTO pagination)
         {
-            var queryable = context.Genres;
-            await HttpContext.InsertPaginationParametersInHeader(queryable);
-            return await queryable
-                .OrderBy(g=>g.Name)
-                .Paginate(pagination)
-                .ProjectTo<GenreDTO>(mapper.ConfigurationProvider)
-                .ToListAsync(); ;
+            return await Get<Genre, GenreDTO>(pagination, orderBy: g => g.Name);
         }
 
         [HttpGet("{id:int}",Name ="GetGenreById")] //api/genres/500
         [OutputCache(Tags = [cacheTag])]
         public async Task<ActionResult<GenreDTO>> Get(int id)
         {
-            var genre = await 
-                context.Genres
-                .ProjectTo<GenreDTO>(mapper.ConfigurationProvider)
-                .FirstOrDefaultAsync(g=>g.Id ==id);
-            if(genre is null)
-            {
-                return NotFound();
-            }
-            return genre;
+            return await Get<Genre,GenreDTO>(id);
         }
         
         [HttpPost]

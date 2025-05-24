@@ -12,7 +12,7 @@ namespace MoviesAPI.Controllers
 {
     [Route("api/actors")]
     [ApiController]
-    public class ActorsController:ControllerBase
+    public class ActorsController : CustomBaseController
     {
         private readonly ApplicationDbContext context;
         private readonly IMapper mapper;
@@ -22,6 +22,7 @@ namespace MoviesAPI.Controllers
         private readonly string container = "actors";
         public ActorsController(ApplicationDbContext context, IMapper mapper, IOutputCacheStore outputCacheStore,
             IFileStorage fileStorage)
+            :base(context,mapper)
         {
             this.context = context;
             this.mapper = mapper;
@@ -32,26 +33,13 @@ namespace MoviesAPI.Controllers
         [OutputCache(Tags = [cacheTag])]
         public async Task<List<ActorDTO>> Get([FromQuery] PaginationDTO pagination)
         {
-            var queryable = context.Actors;
-            await HttpContext.InsertPaginationParametersInHeader(queryable);
-            return await queryable
-                .OrderBy(a => a.Name)
-                .Paginate(pagination)
-                .ProjectTo<ActorDTO>(mapper.ConfigurationProvider)
-                .ToListAsync();
+            return await Get<Actor, ActorDTO>(pagination, orderBy: a => a.Name);
         }
         [HttpGet("{id:int}",Name ="GetActorsById")]
         [OutputCache(Tags = [cacheTag])]
         public async Task<ActionResult<ActorDTO>> Get(int id)
         {
-            var actor = await context.Actors
-                .ProjectTo<ActorDTO> (mapper.ConfigurationProvider)
-                .FirstOrDefaultAsync(a=>a.Id ==id);
-            if (actor is null)
-            {
-                return NotFound();
-            }
-            return actor;
+            return await Get<Actor,ActorDTO>(id);
         }
         [HttpPost]
         public async Task<CreatedAtRouteResult> Post([FromForm] ActorCreationDTO actorCreationDTO)
