@@ -1,9 +1,10 @@
-﻿using MoviesAPI.Validations;
+﻿using MoviesAPI.DTOs;
+using MoviesAPI.Validations;
 using System.ComponentModel.DataAnnotations;
 
 namespace MoviesAPI.Entities
 {
-    public class Genre
+    public class Genre:IId
     {
         public int Id { get; set; }
 

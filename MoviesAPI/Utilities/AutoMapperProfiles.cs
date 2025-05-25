@@ -1,12 +1,13 @@
 ﻿using AutoMapper;
 using MoviesAPI.DTOs;
 using MoviesAPI.Entities;
+using NetTopologySuite.Geometries;
 
 namespace MoviesAPI.Utilities
 {
     public class AutoMapperProfiles :Profile
     {
-        public AutoMapperProfiles() {
+        public AutoMapperProfiles(GeometryFactory geometryFactory) {
             ConfigureGenres();
             ConfigureActors();
         }
