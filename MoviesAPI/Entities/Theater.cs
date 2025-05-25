@@ -1,9 +1,10 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using MoviesAPI.DTOs;
 using NetTopologySuite.Geometries;
 
 namespace MoviesAPI.Entities
 {
-    public class Theater
+    public class Theater : IId
     {
         public int Id { get; set; }
         [Required]
