@@ -1,7 +1,7 @@
 import { AbstractControl,ValidationErrors,ValidatorFn } from "@angular/forms";
 
 export function firstLetterShouldBeUppercase(): ValidatorFn{
-    return(control:AbstractControl):ValidationErrors | null =>{
+return(control:AbstractControl):ValidationErrors | null =>{
 const value =<string>control.value;
 if(!value) return null;
 if(value.length ===0) return null;
