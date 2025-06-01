@@ -41,6 +41,15 @@ namespace MoviesAPI.Controllers
         {
             return await Get<Actor,ActorDTO>(id);
         }
+
+        [HttpGet("{name}")]
+        public async Task<ActionResult<List<MovieActorDTO>>> Get(string name)
+        {
+            return await context.Actors.Where(a=>a.Name.Contains(name))
+                .ProjectTo<MovieActorDTO>(mapper.ConfigurationProvider)
+                .ToListAsync();
+        }
+
         [HttpPost]
         public async Task<CreatedAtRouteResult> Post([FromForm] ActorCreationDTO actorCreationDTO)
         {

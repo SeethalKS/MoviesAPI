@@ -1,6 +1,6 @@
 import { HttpClient, HttpResponse } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
-import { ActorCreationDTO, ActorDTO } from './actors.models';
+import { ActorAutoCompleteDTO, ActorCreationDTO, ActorDTO } from './actors.models';
 import { environment } from '../../environments/environment';
 import { PaginationDTO } from '../shared/models/PaginationDTO';
 import { Observable } from 'rxjs';
@@ -26,6 +26,9 @@ export class ActorsService implements ICRUDService<ActorDTO,ActorCreationDTO> {
    return this.http.get<ActorDTO>(`${this.baseURL}/${id}`);
   }
 
+  public getByName(name:string):Observable<ActorAutoCompleteDTO[]>{
+    return this.http.get<ActorAutoCompleteDTO[]>(`${this.baseURL}/${name}`);
+  }
   public create(actor: ActorCreationDTO){
     const formData = this.buildFormData(actor);
     return this.http.post(this.baseURL,formData);
