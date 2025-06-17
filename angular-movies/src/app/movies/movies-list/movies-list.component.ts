@@ -3,10 +3,12 @@ import { Component, Input } from '@angular/core';
 import { GenericListComponent } from "../../shared/components/generic-list/generic-list.component";
 import {MatButtonModule} from '@angular/material/button';
 import {MatIconModule} from '@angular/material/icon';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-movies-list',
-  imports: [DatePipe, UpperCasePipe, CurrencyPipe, GenericListComponent,MatButtonModule,MatIconModule],
+  imports: [DatePipe, UpperCasePipe, CurrencyPipe,
+     GenericListComponent,MatButtonModule,MatIconModule,RouterLink],
   templateUrl: './movies-list.component.html',
   styleUrl: './movies-list.component.css'
 })

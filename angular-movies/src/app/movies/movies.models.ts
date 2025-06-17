@@ -23,6 +23,14 @@ export interface MoviesPostGetDTO{
     genres :GenreDTO[];
     theaters:TheatreDTO[];
 }
+export interface MoviesPutGetDTO{
+    movie: MovieDTO;
+    selectedGenres: GenreDTO[];
+    nonSelectedGenres:GenreDTO[];
+    selectedTheaters: TheatreDTO[];
+    nonSelectedTheaters:TheatreDTO[];
+    actors:ActorAutoCompleteDTO[];
+}
 
 export interface LandingDTO{
     upcomingReleases: MovieDTO[];

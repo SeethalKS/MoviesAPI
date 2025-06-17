@@ -4,7 +4,7 @@
       @for(movie of movies;track $index)
       {
         <div class="movie-container">
-        <a>
+        <a [routerLink]="['movies/edit',movie.id]">
           @if(movie.poster)
           {
             <img [src]="movie.poster" width="169" height="250" />
@@ -19,7 +19,7 @@
           </a>
         </p>
         <div>
-          <a mat-flat-button>
+          <a mat-flat-button  [routerLink]="['movies/edit',movie.id]">
            Edit
           </a>
           <button mat-flat-button type="button" class="warn">Delete</button>
