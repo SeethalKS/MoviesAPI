@@ -2,7 +2,9 @@
   Upcoming Releases
 </h2>
 
-<app-movies-list [movies]="upcomingReleasesMovies"></app-movies-list>
+<app-movies-list [movies]="upcomingReleasesMovies"
+(deleted)="handleDelete()"
+></app-movies-list>
 
 <h2>In theatres</h2>
-<app-movies-list [movies]="inTheatresMovies"></app-movies-list>
+<app-movies-list [movies]="inTheatresMovies" (deleted)="handleDelete()"></app-movies-list>

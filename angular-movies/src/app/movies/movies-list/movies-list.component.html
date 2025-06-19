@@ -4,7 +4,7 @@
       @for(movie of movies;track $index)
       {
         <div class="movie-container">
-        <a [routerLink]="['movies/edit',movie.id]">
+        <a [routerLink]="['/movie',movie.id]">
           @if(movie.poster)
           {
             <img [src]="movie.poster" width="169" height="250" />
@@ -14,7 +14,7 @@
         }
         </a>
         <p>
-          <a>
+           <a [routerLink]="['/movie',movie.id]">
             {{movie.title}}
           </a>
         </p>
@@ -22,7 +22,13 @@
           <a mat-flat-button  [routerLink]="['movies/edit',movie.id]">
            Edit
           </a>
-          <button mat-flat-button type="button" class="warn">Delete</button>
+          <button mat-flat-button type="button" class="warn"
+          (confirm)="delete(movie.id)"
+          [swal]="{title: 'Confirmation',text: 'Are you sure want to delete this movie?',
+            showCancelButton:true
+          }"
+          >
+          Delete</button>
         </div>
         </div>
 

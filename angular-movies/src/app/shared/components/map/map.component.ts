@@ -14,6 +14,9 @@ export class MapComponent implements OnInit{
 
     @Input()
     initialCoordinates:Coordinate[] =[];
+
+    @Input()
+    readOnlyMode:boolean = false;
     
   @Output()
   coordinatedSelected = new EventEmitter<Coordinate>();
@@ -22,9 +25,13 @@ export class MapComponent implements OnInit{
   ngOnInit(): void {
     this.layers = this.initialCoordinates.map(value =>
     {
-      return marker([value.latitude,value.longitude],this.markerOptions);
+      const myMarker= marker([value.latitude,value.longitude],this.markerOptions);
+      if(value.text){
+        myMarker.bindPopup(value.text,{autoClose:false,autoPan:false});
+      }
+      return myMarker;
     }
-    )
+    );
   }
 
 
@@ -51,6 +58,9 @@ export class MapComponent implements OnInit{
   layers: Marker<any>[] = [];
   
   handleClick(event:LeafletMouseEvent){
+    if(this.readOnlyMode){
+      return;
+    }
     const latitude = event.latlng.lat;
     const longitude = event.latlng.lng;
     console.log({latitude,longitude});

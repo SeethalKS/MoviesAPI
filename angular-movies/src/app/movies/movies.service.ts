@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { environment } from '../../environments/environment.development';
 import { Observable } from 'rxjs';
-import { LandingDTO, MovieCreationDTO, MoviesPostGetDTO, MoviesPutGetDTO } from './movies.models';
+import { LandingDTO, MovieCreationDTO, MovieDTO, MoviesPostGetDTO, MoviesPutGetDTO } from './movies.models';
 
 @Injectable({
   providedIn: 'root'
@@ -21,6 +21,10 @@ export class MoviesService {
     return this.http.get<LandingDTO>(`${this.baseURL}/landing`);
   }
 
+  public getById(id:number): Observable<MovieDTO>{
+    return this.http.get<MovieDTO>(`${this.baseURL}/${id}`);
+  }
+
   public create(movie:MovieCreationDTO){
 
     const formData = this.buildFormData(movie);
@@ -34,6 +38,9 @@ export class MoviesService {
   public update(id: number,movie:MovieCreationDTO){
     const formData = this.buildFormData(movie);
     return this.http.put(`${this.baseURL}/${id}`,formData);
+  }
+  public delete(id:number){
+    return this.http.delete(`${this.baseURL}/${id}`);
   }
   private buildFormData(movie:MovieCreationDTO):FormData{
     const formData = new FormData();

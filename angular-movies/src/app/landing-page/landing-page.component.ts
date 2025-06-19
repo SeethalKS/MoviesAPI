@@ -15,9 +15,19 @@ export class LandingPageComponent {
 
   moviesService = inject(MoviesService)
   constructor(){
-    this.moviesService.getLanding().subscribe(response => {
+    
+    this.loadMovies();
+  }
+
+    loadMovies(){
+      this.moviesService.getLanding().subscribe(response => {
      this.upcomingReleasesMovies = response.upcomingReleases;
      this.inTheatresMovies = response.inTheaters;
     });
-  }
+    }
+
+    handleDelete(){
+      this.loadMovies();
+    }
+  
 }

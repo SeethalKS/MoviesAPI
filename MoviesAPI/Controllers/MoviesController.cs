@@ -148,6 +148,21 @@ namespace MoviesAPI.Controllers
             await outputCacheStore.EvictByTagAsync(cacheTag, default);
             return NoContent();
         }
+        [HttpDelete("{id:int}")]
+        public async Task<ActionResult> Delete(int id)
+        {
+            var movie=await context.Movies.FirstOrDefaultAsync(m=>m.Id == id);
+            if(movie is null)
+            {
+                return NotFound();
+            }
+            context.Remove(movie);
+            await context.SaveChangesAsync();
+            await outputCacheStore.EvictByTagAsync(cacheTag,default);
+            await fileStorage.Delete(movie.Poster,container);
+
+            return NoContent();
+        }
         private void AssignActorsOrder(Movie movie)
         {
             if(movie.MoviesActors is not null)
