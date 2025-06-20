@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams, HttpResponse } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { environment } from '../../environments/environment.development';
 import { Observable } from 'rxjs';
@@ -23,6 +23,12 @@ export class MoviesService {
 
   public getById(id:number): Observable<MovieDTO>{
     return this.http.get<MovieDTO>(`${this.baseURL}/${id}`);
+  }
+
+
+  public filter(values:any):Observable<HttpResponse<MovieDTO[]>>{
+    const params = new HttpParams({fromObject:values});
+    return this.http.get<MovieDTO[]>(`${this.baseURL}/filter`,{params,observe:'response'});
   }
 
   public create(movie:MovieCreationDTO){

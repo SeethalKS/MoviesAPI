@@ -30,5 +30,9 @@
  </div>
 </form>
 <app-movies-list [movies]="movies">
-
 </app-movies-list>
+
+<mat-paginator showFirstLastButtons [length]="totalRecordsCount"
+[pageIndex]="pagination.page-1" [pageSize]="pagination.recordsperPage"
+[pageSizeOptions]="[5,10,50]" class="mat-elevation-z8" (page)="handlePagination($event)"
+></mat-paginator>
