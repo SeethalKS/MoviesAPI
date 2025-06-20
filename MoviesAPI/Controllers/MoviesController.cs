@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using MoviesAPI.DTOs;
 using MoviesAPI.Entities;
 using MoviesAPI.Services;
+using MoviesAPI.Utilities;
 
 namespace MoviesAPI.Controllers
 {
@@ -68,6 +69,39 @@ namespace MoviesAPI.Controllers
             }
             return movie;
         }
+
+        [HttpGet("filter")]
+        public async Task<ActionResult<List<MovieDTO>>> Filter([FromQuery] MoviesFilterDTO moviesFilterDTO)
+        {
+            var moviesQueryable = context.Movies.AsQueryable();
+            if(!string.IsNullOrEmpty(moviesFilterDTO.Title))
+            {
+                moviesQueryable = moviesQueryable.Where(m=>m.Title.Contains(moviesFilterDTO.Title));
+            }
+            if(moviesFilterDTO.InTheaters)
+            {
+                moviesQueryable = moviesQueryable.Where(m=>m.MoviesTheaters.Select(mt => mt.MovieId).Contains(m.Id));
+            }
+            if (moviesFilterDTO.UpcomingReleases)
+            {
+                var today = DateTime.Today;
+                moviesQueryable = moviesQueryable.Where(m=>m.ReleaseDate > today);
+            }
+            if(moviesFilterDTO.GenreId !=0)
+            {
+                moviesQueryable = moviesQueryable.Where(m=>m.MoviesGenres.Select(mg =>mg.GenreId)
+                .Contains(moviesFilterDTO.GenreId));
+            }
+            await HttpContext.InsertPaginationParametersInHeader(moviesQueryable);
+            var movies = await moviesQueryable.Paginate(moviesFilterDTO.PaginationDTO)
+                .ProjectTo<MovieDTO>(mapper.ConfigurationProvider)
+                .ToListAsync();
+            return movies;
+
+        }
+
+
+
         [HttpGet("postget")]
         public async Task<ActionResult<MoviesPostGetDTO>> PostGet()
         {

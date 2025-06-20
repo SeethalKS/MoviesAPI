@@ -35,6 +35,15 @@ namespace MoviesAPI.Controllers
             return await Get<Genre, GenreDTO>(pagination, orderBy: g => g.Name);
         }
 
+        [HttpGet("all")] 
+
+        [OutputCache(Tags = [cacheTag])]
+        public async Task<List<GenreDTO>> Get()
+        {
+            return await Get<Genre, GenreDTO>(orderBy: g => g.Name);
+        }
+
+
         [HttpGet("{id:int}",Name ="GetGenreById")] //api/genres/500
         [OutputCache(Tags = [cacheTag])]
         public async Task<ActionResult<GenreDTO>> Get(int id)
